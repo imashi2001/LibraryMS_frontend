@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
@@ -10,13 +10,19 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const router = useRouter();
 
   // Redirect if already authenticated
-  if (isAuthenticated && typeof window !== 'undefined') {
-    router.push('/user/dashboard');
-  }
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'LIBRARIAN') {
+        router.push('/librarian/dashboard');
+      } else {
+        router.push('/user/dashboard');
+      }
+    }
+  }, [isAuthenticated, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

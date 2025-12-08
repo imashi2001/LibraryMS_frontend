@@ -106,3 +106,23 @@ export interface BlacklistUserRequest {
   isBlacklisted: boolean;
 }
 
+export interface BookFilters {
+  categoryId?: number | null;
+  author?: string | null;
+  genre?: string | null;
+  language?: string | null;
+  title?: string | null;
+  page?: number;
+  size?: number;
+}
+
+export interface PaginatedBooksResponse {
+  content: Book[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+  first: boolean;
+  last: boolean;
+}
+

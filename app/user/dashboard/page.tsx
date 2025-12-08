@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 export default function UserDashboard() {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
@@ -60,8 +61,14 @@ export default function UserDashboard() {
 
           <div className="bg-white shadow rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-            <div className="space-y-2">
-              <p className="text-gray-600">Dashboard features coming soon...</p>
+            <div className="space-y-3">
+              <Link
+                href="/user/books"
+                className="block px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition text-center"
+              >
+                Browse Books
+              </Link>
+              <p className="text-sm text-gray-600">Discover and explore our book collection</p>
             </div>
           </div>
         </div>
