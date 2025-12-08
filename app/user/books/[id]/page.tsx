@@ -7,6 +7,7 @@ import { getBookById } from '@/lib/api/books';
 import { getImageUrl } from '@/lib/api';
 import { Book } from '@/types';
 import Link from 'next/link';
+import ReserveBookButton from '@/components/user/ReserveBookButton';
 
 export default function BookDetailsPage() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -192,10 +193,21 @@ export default function BookDetailsPage() {
               )}
 
               <div className="pt-4 border-t">
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-400 mb-4">
                   Added: {new Date(book.createdAt).toLocaleDateString()}
                 </p>
               </div>
+
+              {/* Reservation Button */}
+              {user.role === 'USER' && (
+                <ReserveBookButton
+                  book={book}
+                  onReservationSuccess={(reservation) => {
+                    // Reload book to update availability
+                    loadBook();
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>

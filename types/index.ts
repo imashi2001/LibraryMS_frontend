@@ -49,7 +49,7 @@ export interface Category {
   createdAt: string;
 }
 
-export type BookStatus = 'AVAILABLE' | 'UNAVAILABLE' | 'MAINTENANCE';
+export type BookStatus = 'AVAILABLE' | 'UNAVAILABLE' | 'MAINTENANCE' | 'RESERVED';
 
 export interface Book {
   id: number;
@@ -124,5 +124,22 @@ export interface PaginatedBooksResponse {
   size: number;
   first: boolean;
   last: boolean;
+}
+
+export type ReservationStatus = 'ACTIVE' | 'RETURNED' | 'CANCELLED' | 'OVERDUE';
+
+export interface Reservation {
+  id: number;
+  user: User;
+  book: Book;
+  reservationDate: string;
+  dueDate: string;
+  returnDate?: string;
+  status: ReservationStatus;
+  createdAt: string;
+}
+
+export interface ReserveBookRequest {
+  reservationDays: 7 | 14 | 21;
 }
 
