@@ -172,61 +172,100 @@ export default function BooksPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {books.map((book) => (
-              <div key={book.id} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition">
-                {book.imageUrl && (
-                  <div className="relative w-full h-48">
-                    <Image
-                      src={getImageUrl(book.imageUrl) || ''}
-                      alt={book.title}
-                      fill
-                      className="object-cover"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
-                <div className="p-5">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1">{book.title}</h3>
-                  <p className="text-sm text-gray-600 mb-2">by {book.author}</p>
-                  {book.category && (
-                    <span className="inline-block px-2 py-1 text-xs bg-indigo-100 text-indigo-800 rounded-full mb-3">
-                      {book.category.name}
-                    </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {books.map((book) => {
+              const getStatusInfo = () => {
+                if (book.status === 'AVAILABLE') {
+                  return { text: 'Available', color: 'green', dot: 'bg-green-500' };
+                } else if (book.status === 'UNAVAILABLE' || book.availableCopies === 0) {
+                  return { text: 'Checked Out', color: 'red', dot: 'bg-red-500' };
+                } else {
+                  return { text: 'Reserved', color: 'yellow', dot: 'bg-yellow-500' };
+                }
+              };
+
+              const statusInfo = getStatusInfo();
+
+              const getGenreColor = (categoryName: string) => {
+                const name = categoryName.toLowerCase();
+                if (name.includes('fiction') || name.includes('novel')) return 'bg-blue-100 text-blue-800';
+                if (name.includes('technology') || name.includes('tech')) return 'bg-green-100 text-green-800';
+                if (name.includes('science')) return 'bg-purple-100 text-purple-800';
+                if (name.includes('biography')) return 'bg-orange-100 text-orange-800';
+                if (name.includes('non-fiction') || name.includes('nonfiction')) return 'bg-purple-100 text-purple-800';
+                return 'bg-indigo-100 text-indigo-800';
+              };
+
+              return (
+                <div key={book.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                  {/* Book Cover */}
+                  {book.imageUrl ? (
+                    <div className="relative w-full h-80 overflow-hidden">
+                      <Image
+                        src={getImageUrl(book.imageUrl) || ''}
+                        alt={book.title}
+                        fill
+                        className="object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-80 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                      <svg className="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                    </div>
                   )}
-                  <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-                    <div className="flex items-center space-x-2">
-                      <span className={`px-2 py-1 text-xs rounded-full font-medium ${
-                        book.status === 'AVAILABLE'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {book.status}
+                  
+                  {/* Book Info */}
+                  <div className="p-5 flex-1 flex flex-col">
+                    <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2">{book.title}</h3>
+                    <p className="text-sm text-gray-600 mb-3">by {book.author}</p>
+                    
+                    {/* Genre Badge */}
+                    {book.category && (
+                      <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full mb-3 w-fit ${getGenreColor(book.category.name)}`}>
+                        {book.category.name}
                       </span>
-                      <span className="text-xs text-gray-500">
+                    )}
+                    
+                    {/* Language */}
+                    {book.language && (
+                      <p className="text-xs text-gray-500 mb-3">Language: {book.language}</p>
+                    )}
+                    
+                    {/* Status with Dot */}
+                    <div className="flex items-center space-x-2 mb-4">
+                      <div className={`w-2 h-2 rounded-full ${statusInfo.dot}`}></div>
+                      <span className="text-sm font-medium text-gray-700">{statusInfo.text}</span>
+                    </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="mt-auto pt-4 border-t border-gray-100 space-y-2">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => setEditingBookId(book.id)}
+                          className="flex-1 px-3 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => setDeletingBookId(book.id)}
+                          className="flex-1 px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      <p className="text-xs text-center text-gray-500">
                         {book.availableCopies}/{book.totalCopies} copies
-                      </span>
+                      </p>
                     </div>
                   </div>
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <button
-                      onClick={() => setEditingBookId(book.id)}
-                      className="px-4 py-2 text-sm bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition font-medium"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => setDeletingBookId(book.id)}
-                      className="px-4 py-2 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-medium"
-                    >
-                      Delete
-                    </button>
-                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
