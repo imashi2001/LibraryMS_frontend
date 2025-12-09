@@ -320,12 +320,13 @@ export default function MyReservationsPage() {
                   <div className="p-6">
                     <div className="flex flex-col md:flex-row gap-6">
                       {/* Book Image */}
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0 relative w-32 h-44">
                         {reservation.book.imageUrl ? (
-                          <img
+                          <Image
                             src={getImageUrl(reservation.book.imageUrl) || ''}
                             alt={reservation.book.title}
-                            className="w-32 h-44 object-cover rounded-lg shadow-md"
+                            fill
+                            className="object-cover rounded-lg shadow-md"
                           />
                         ) : (
                           <div className="w-32 h-44 bg-gray-200 rounded-lg flex items-center justify-center">

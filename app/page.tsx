@@ -14,17 +14,6 @@ export default function Home() {
   const { login, isAuthenticated, user, isLoading: authLoading } = useAuth();
   const router = useRouter();
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (!authLoading && isAuthenticated && user) {
-      if (user.role === 'LIBRARIAN') {
-        router.push('/librarian/dashboard');
-      } else {
-        router.push('/user/dashboard');
-      }
-    }
-  }, [isAuthenticated, user, authLoading, router]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -32,9 +21,9 @@ export default function Home() {
 
     try {
       await login(email, password);
+      // Login function in AuthContext will handle the redirect
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -50,9 +39,8 @@ export default function Home() {
     );
   }
 
-  if (isAuthenticated) {
-    return null; // Will redirect
-  }
+  // Always show landing page - don't redirect automatically
+  // Users can manually navigate or will be redirected after login
 
   return (
     <div className="min-h-screen relative flex items-center justify-center">
