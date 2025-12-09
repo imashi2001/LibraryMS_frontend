@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -20,8 +21,19 @@ export default function LibrarianNavbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <h1 className="text-xl font-bold text-indigo-600">Library Management</h1>
+            <div className="flex-shrink-0 flex items-center space-x-2">
+              <Link href="/librarian/dashboard" className="flex items-center space-x-2">
+                <div className="relative w-10 h-10">
+                  <Image
+                    src="/logo.png"
+                    alt="Library MS Logo"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+                <h1 className="text-xl font-bold text-indigo-600">Library MS</h1>
+              </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navItems.map((item) => (

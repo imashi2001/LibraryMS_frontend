@@ -21,3 +21,23 @@ export const cancelReservation = async (reservationId: number): Promise<void> =>
   await api.delete(`/reservations/${reservationId}`);
 };
 
+// Renew a reservation
+export const renewReservation = async (reservationId: number): Promise<Reservation> => {
+  const response = await api.post<{ status: string; message: string; data: Reservation }>(
+    `/reservations/${reservationId}/renew`
+  );
+  return response.data.data;
+};
+
+// Get dashboard statistics
+export interface DashboardStats {
+  booksReserved: number;
+  booksDueSoon: number;
+  totalBorrowed: number;
+}
+
+export const getDashboardStats = async (): Promise<DashboardStats> => {
+  const response = await api.get<{ status: string; message: string; data: DashboardStats }>('/user/dashboard/stats');
+  return response.data.data;
+};
+
