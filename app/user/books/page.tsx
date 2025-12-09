@@ -137,6 +137,7 @@ export default function BooksPage() {
               src="/book-browsing-hero.jpg"
               alt="Book Browsing"
               fill
+              sizes="100vw"
               className="object-cover"
               priority
               quality={90}

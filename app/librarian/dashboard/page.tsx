@@ -90,6 +90,7 @@ export default function LibrarianDashboard() {
             src="/hero-background.jpg"
             alt="Library Background"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
             quality={90}

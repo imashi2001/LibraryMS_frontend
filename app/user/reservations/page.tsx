@@ -170,6 +170,7 @@ export default function MyReservationsPage() {
             src="/reservation-hero.png"
             alt="Reservations Background"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
             quality={90}
@@ -326,6 +327,7 @@ export default function MyReservationsPage() {
                             src={getImageUrl(reservation.book.imageUrl) || ''}
                             alt={reservation.book.title}
                             fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             className="object-cover rounded-lg shadow-md"
                           />
                         ) : (

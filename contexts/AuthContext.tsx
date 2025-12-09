@@ -66,12 +66,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(authData.token);
       setUser(userData);
 
-      // Redirect based on role
-      if (authData.role === Role.LIBRARIAN) {
-        router.push('/librarian/dashboard');
-      } else {
-        router.push('/user/dashboard');
-      }
+      // Redirect to home page after login
+      router.push('/');
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Login failed');
     }
@@ -86,29 +82,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         role,
       });
 
-      const authData = response.data; // Backend returns AuthResponse directly
-      const userData: User = {
-        id: authData.id,
-        email: authData.email,
-        name: authData.name,
-        role: authData.role,
-        isBlacklisted: false,
-        createdAt: new Date().toISOString(),
-      };
-
-      // Store token and user
-      authStorage.setToken(authData.token);
-      authStorage.setUser(userData);
-
-      setToken(authData.token);
-      setUser(userData);
-
-      // Redirect based on role
-      if (authData.role === Role.LIBRARIAN) {
-        router.push('/librarian/dashboard');
-      } else {
-        router.push('/user/dashboard');
-      }
+      // Don't auto-login after registration
+      // Just redirect to login page
+      router.push('/login');
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Registration failed');
     }

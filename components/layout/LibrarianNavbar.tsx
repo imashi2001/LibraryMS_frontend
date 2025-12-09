@@ -29,15 +29,16 @@ export default function LibrarianNavbar() {
           {/* Logo and Brand */}
           <div className="flex items-center">
             <Link href="/librarian/dashboard" className="flex items-center space-x-2">
-              <div className="relative w-10 h-10">
-                <Image
-                  src="/logo.png"
-                  alt="Library MS Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
+                <div className="relative w-10 h-10">
+                  <Image
+                    src="/logo.png"
+                    alt="Library MS Logo"
+                    fill
+                    sizes="40px"
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               <span className="text-xl font-bold text-gray-900">Library MS</span>
             </Link>
           </div>

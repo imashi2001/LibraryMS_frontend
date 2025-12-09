@@ -27,6 +27,7 @@ export default function UserNavbar() {
                   src="/logo.png"
                   alt="Library MS Logo"
                   fill
+                  sizes="40px"
                   className="object-contain"
                   priority
                 />

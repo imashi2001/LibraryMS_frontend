@@ -42,8 +42,9 @@ export default function UserDashboard() {
       let statsData: DashboardStats;
       try {
         statsData = await getDashboardStats();
-      } catch {
-        // Calculate stats from reservations if API doesn't exist
+      } catch (error) {
+        // Silently fallback to calculating stats from reservations if API doesn't exist or fails
+        // This is expected behavior if the backend endpoint is not implemented
         const activeReservations = reservationsData.filter(r => r.status === 'ACTIVE');
         const dueSoon = activeReservations.filter(r => {
           const dueDate = new Date(r.dueDate);
@@ -130,6 +131,7 @@ export default function UserDashboard() {
             src="/hero-background.jpg"
             alt="Library Background"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
             quality={90}
@@ -274,6 +276,7 @@ export default function UserDashboard() {
                   src="/browsing-image.jpg"
                   alt="Browse Books"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -298,6 +301,7 @@ export default function UserDashboard() {
                   src="/reservation-image.jpg"
                   alt="My Reservations"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -388,6 +392,7 @@ export default function UserDashboard() {
                   src="/profile-view-image.jpg"
                   alt="Profile View"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>

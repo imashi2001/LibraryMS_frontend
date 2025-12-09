@@ -47,6 +47,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Suppress console errors for stats endpoint (expected to fail if not implemented)
+    if (error.config?.url?.includes('/user/dashboard/stats') && error.response?.status === 500) {
+      // Silently handle this error - it's expected if the endpoint is not implemented
+      // The dashboard will use fallback calculation
+      return Promise.reject(error);
+    }
+    
     if (error.response?.status === 401) {
       // Token expired or invalid
       Cookies.remove('token');

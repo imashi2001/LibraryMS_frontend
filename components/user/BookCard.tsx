@@ -43,6 +43,7 @@ export default function BookCard({ book }: BookCardProps) {
               src={getImageUrl(book.imageUrl) || ''}
               alt={book.title}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover hover:scale-105 transition-transform duration-300"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';

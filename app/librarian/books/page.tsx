@@ -100,6 +100,7 @@ export default function BooksPage() {
             src="/hero-background.jpg"
             alt="Books Management Background"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
             quality={90}
@@ -205,6 +206,7 @@ export default function BooksPage() {
                         src={getImageUrl(book.imageUrl) || ''}
                         alt={book.title}
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
