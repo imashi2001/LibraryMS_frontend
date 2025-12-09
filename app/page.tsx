@@ -11,7 +11,7 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login, isAuthenticated, user, isLoading: authLoading } = useAuth();
+  const { login } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,16 +28,8 @@ export default function Home() {
     }
   };
 
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  // Show minimal loading state - don't block the entire page
+  // The page content can render while auth is loading
 
   // Always show landing page - don't redirect automatically
   // Users can manually navigate or will be redirected after login
@@ -46,13 +38,15 @@ export default function Home() {
     <div className="min-h-screen relative flex items-center justify-center">
       {/* Full Page Background Image */}
       <div className="absolute inset-0 z-0">
+        {/* Placeholder gradient background while image loads */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800"></div>
         <Image
           src="/LMB1.jpg"
           alt="Library Background"
           fill
-          className="object-cover"
+          className="object-cover transition-opacity duration-300"
           priority
-          quality={100}
+          quality={75}
         />
         {/* Overlay for better readability */}
         <div className="absolute inset-0 bg-black/40"></div>

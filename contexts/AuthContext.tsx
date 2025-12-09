@@ -14,16 +14,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Initialize auth state from storage
+  // Initialize auth state from storage (non-blocking)
   useEffect(() => {
-    const storedToken = authStorage.getToken();
-    const storedUser = authStorage.getUser();
-    
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(storedUser);
+    // Use requestIdleCallback or setTimeout to make it non-blocking
+    const initAuth = () => {
+      try {
+        const storedToken = authStorage.getToken();
+        const storedUser = authStorage.getUser();
+        
+        if (storedToken && storedUser) {
+          setToken(storedToken);
+          setUser(storedUser);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // Use immediate execution for fast devices, defer for slower ones
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      requestIdleCallback(initAuth, { timeout: 100 });
+    } else {
+      // Fallback: small timeout to prevent blocking
+      setTimeout(initAuth, 0);
     }
-    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
