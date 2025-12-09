@@ -230,54 +230,177 @@ export default function UserDashboard() {
           </div>
         </div>
 
-        {/* Action Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+        {/* Feature Sections with Images */}
+        <div className="space-y-0 mb-8">
+          {/* Browse Books Section */}
+          <div className="overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              {/* Text Content */}
+              <div className="p-8 lg:p-12 flex flex-col justify-center bg-gray-50">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Browse Our Collection
+                </h2>
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  Explore thousands of books from various genres, authors, and languages. Use our advanced search and filter options to find exactly what you're looking for. Discover new favorites and expand your reading horizons.
+                </p>
+                <p className="text-base text-gray-500 mb-6">
+                  Search by title, author, category, genre, or language. Browse through our carefully curated collection and reserve books that interest you.
+                </p>
+                <ul className="space-y-2 mb-6">
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">Advanced search and filtering options</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">Browse by categories and genres</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">View detailed book information</span>
+                  </li>
+                </ul>
+              </div>
+              
+              {/* Image with Button */}
+              <div className="relative h-96 lg:h-auto min-h-[400px]">
+                <Image
+                  src="/browsing-image.jpg"
+                  alt="Browse Books"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-8 left-0 right-0 px-8 flex justify-center">
+                  <Link
+                    href="/user/books"
+                    className="px-8 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105"
+                  >
+                    Browse Books
+                  </Link>
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Browse Books</h3>
-            <p className="text-gray-600 mb-4">Discover new books and explore our collection.</p>
-            <Link
-              href="/user/books"
-              className="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium"
-            >
-              Start Browsing
-            </Link>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-              </svg>
+          {/* My Reservations Section */}
+          <div className="overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              {/* Image with Button */}
+              <div className="relative h-96 lg:h-auto min-h-[400px] order-2 lg:order-1">
+                <Image
+                  src="/reservation-image.jpg"
+                  alt="My Reservations"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-8 left-0 right-0 px-8 flex justify-center">
+                  <Link
+                    href="/user/reservations"
+                    className="px-8 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105"
+                  >
+                    My Reservation
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Text Content */}
+              <div className="p-8 lg:p-12 flex flex-col justify-center bg-gray-50 order-1 lg:order-2">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Manage Your Reservations
+                </h2>
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  Keep track of all your book reservations in one place. View active reservations, check due dates, renew books, and manage your reading schedule. Never miss a return date with our helpful reminders.
+                </p>
+                <p className="text-base text-gray-500 mb-6">
+                  Monitor your borrowing history, see upcoming due dates, and easily renew books when needed. Stay organized and never lose track of your reading materials.
+                </p>
+                <ul className="space-y-2 mb-6">
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">View all active and past reservations</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">Renew books before due date</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">Get notifications for due dates</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">My Reservations</h3>
-            <p className="text-gray-600 mb-4">View and manage your book reservations.</p>
-            <Link
-              href="/user/reservations"
-              className="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium"
-            >
-              View Reservations
-            </Link>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+          {/* Profile View Section */}
+          <div className="overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              {/* Text Content */}
+              <div className="p-8 lg:p-12 flex flex-col justify-center bg-gray-50">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Your Profile & Settings
+                </h2>
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  Manage your account settings, update personal information, and customize your library experience. View your reading history, preferences, and account details all in one convenient place.
+                </p>
+                <p className="text-base text-gray-500 mb-6">
+                  Keep your profile up to date, review your borrowing history, and adjust your account preferences to enhance your library experience.
+                </p>
+                <ul className="space-y-2 mb-6">
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">Update personal information</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">View complete borrowing history</span>
+                  </li>
+                  <li className="flex items-start">
+                    <svg className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600">Customize account preferences</span>
+                  </li>
+                </ul>
+              </div>
+              
+              {/* Image with Button */}
+              <div className="relative h-96 lg:h-auto min-h-[400px]">
+                <Image
+                  src="/profile-view-image.jpg"
+                  alt="Profile View"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-8 left-0 right-0 px-8 flex justify-center">
+                  <Link
+                    href="/user/profile"
+                    className="px-8 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105"
+                  >
+                    Profile View
+                  </Link>
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Profile Settings</h3>
-            <p className="text-gray-600 mb-4">Update your account and preferences.</p>
-            <Link
-              href="/user/profile"
-              className="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium"
-            >
-              Manage Profile
-            </Link>
           </div>
         </div>
 
