@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { reserveBook } from '@/lib/api/reservations';
+import { getErrorMessage } from '@/lib/utils/errorHandler';
+import { RESERVATION_PERIODS, SUCCESS_MESSAGE_DURATION } from '@/lib/constants';
 import { Book } from '@/types';
 
 interface ReserveBookButtonProps {
@@ -10,7 +12,7 @@ interface ReserveBookButtonProps {
 }
 
 export default function ReserveBookButton({ book, onReservationSuccess }: ReserveBookButtonProps) {
-  const [selectedDays, setSelectedDays] = useState<7 | 14 | 21>(7);
+  const [selectedDays, setSelectedDays] = useState<7 | 14 | 21>(RESERVATION_PERIODS[0]);
   const [isReserving, setIsReserving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -32,12 +34,12 @@ export default function ReserveBookButton({ book, onReservationSuccess }: Reserv
         onReservationSuccess(reservation);
       }
 
-      // Hide success message after 3 seconds
+      // Hide success message after configured duration
       setTimeout(() => {
         setSuccess(false);
-      }, 3000);
+      }, SUCCESS_MESSAGE_DURATION);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to reserve book. Please try again.');
+      setError(getErrorMessage(err, 'Failed to reserve book. Please try again.'));
     } finally {
       setIsReserving(false);
     }
@@ -66,7 +68,7 @@ export default function ReserveBookButton({ book, onReservationSuccess }: Reserv
           Reservation Period
         </label>
         <div className="grid grid-cols-3 gap-2">
-          {([7, 14, 21] as const).map((days) => (
+          {RESERVATION_PERIODS.map((days) => (
             <button
               key={days}
               onClick={() => setSelectedDays(days)}

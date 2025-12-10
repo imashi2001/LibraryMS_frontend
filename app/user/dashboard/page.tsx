@@ -6,6 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getMyReservations, getDashboardStats, DashboardStats, renewReservation } from '@/lib/api/reservations';
+import { getErrorMessage } from '@/lib/utils/errorHandler';
+import { DUE_SOON_THRESHOLD_DAYS } from '@/lib/constants';
 import { Reservation } from '@/types';
 
 export default function UserDashboard() {
@@ -36,30 +38,33 @@ export default function UserDashboard() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const reservationsData = await getMyReservations();
       
-      // Try to get stats from API, but calculate from reservations as fallback
-      let statsData: DashboardStats;
-      try {
-        statsData = await getDashboardStats();
-      } catch (error) {
-        // Silently fallback to calculating stats from reservations if API doesn't exist or fails
-        // This is expected behavior if the backend endpoint is not implemented
-        const activeReservations = reservationsData.filter(r => r.status === 'ACTIVE');
-        const dueSoon = activeReservations.filter(r => {
-          const dueDate = new Date(r.dueDate);
-          const now = new Date();
-          const daysUntilDue = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-          return daysUntilDue <= 7 && daysUntilDue >= 0;
-        });
-        const returnedReservations = reservationsData.filter(r => r.status === 'RETURNED');
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      const reservationsData = await Promise.race([
+        getMyReservations(),
+        timeoutPromise
+      ]) as Reservation[];
+      
+      // Calculate stats directly from reservations (faster - no API call needed)
+      // The stats API endpoint is not implemented in the backend
+      const activeReservations = reservationsData.filter(r => r.status === 'ACTIVE');
+      const dueSoon = activeReservations.filter(r => {
+        const dueDate = new Date(r.dueDate);
+        const now = new Date();
+        const daysUntilDue = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        return daysUntilDue <= DUE_SOON_THRESHOLD_DAYS && daysUntilDue >= 0;
+      });
+      const returnedReservations = reservationsData.filter(r => r.status === 'RETURNED');
 
-        statsData = {
-          booksReserved: activeReservations.length,
-          booksDueSoon: dueSoon.length,
-          totalBorrowed: returnedReservations.length + activeReservations.length,
-        };
-      }
+      const statsData: DashboardStats = {
+        booksReserved: activeReservations.length,
+        booksDueSoon: dueSoon.length,
+        totalBorrowed: returnedReservations.length + activeReservations.length,
+      };
 
       setReservations(reservationsData);
       setStats(statsData);
@@ -71,7 +76,16 @@ export default function UserDashboard() {
       setRecentActivity(recent);
 
     } catch (error) {
+      // Error is logged for debugging but user sees fallback stats
       console.error('Failed to load dashboard data:', error);
+      // Set empty state so dashboard still renders
+      setReservations([]);
+      setStats({
+        booksReserved: 0,
+        booksDueSoon: 0,
+        totalBorrowed: 0,
+      });
+      setRecentActivity([]);
     } finally {
       setLoading(false);
     }
@@ -82,7 +96,7 @@ export default function UserDashboard() {
       await renewReservation(reservationId);
       await loadDashboardData(); // Reload data
     } catch (error: any) {
-      alert(error.response?.data?.message || 'Failed to renew reservation');
+      alert(getErrorMessage(error, 'Failed to renew reservation'));
     }
   };
 
@@ -102,7 +116,9 @@ export default function UserDashboard() {
     return `${days} days ago`;
   };
 
-  if (authLoading || loading) {
+  // Show minimal loading only during auth check
+  // Dashboard content can render even while loading reservations
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -112,6 +128,13 @@ export default function UserDashboard() {
       </div>
     );
   }
+
+  if (!isAuthenticated || !user) {
+    return null;
+  }
+
+  // Dashboard will render with loading states in components
+  // No need to block entire page while loading reservations
 
   if (!isAuthenticated || !user) {
     return null;

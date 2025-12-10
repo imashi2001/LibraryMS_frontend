@@ -62,9 +62,10 @@ export default function LoginPage() {
           src="/LMB1.jpg"
           alt="Library Background"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
-          quality={100}
+          quality={75}
         />
         {/* Overlay for better readability */}
         <div className="absolute inset-0 bg-black/40"></div>

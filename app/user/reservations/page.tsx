@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { getMyReservations, renewReservation, cancelReservation } from '@/lib/api/reservations';
+import { getErrorMessage } from '@/lib/utils/errorHandler';
 import { Reservation, ReservationStatus } from '@/types';
 import { getImageUrl } from '@/lib/api';
 import Link from 'next/link';
@@ -58,7 +59,7 @@ export default function MyReservationsPage() {
       setSuccessMessage('Reservation renewed successfully!');
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error: any) {
-      setErrorMessage(error.response?.data?.message || 'Failed to renew reservation');
+      setErrorMessage(getErrorMessage(error, 'Failed to renew reservation'));
       setTimeout(() => setErrorMessage(''), 5000);
     } finally {
       setActionLoading(null);
@@ -76,7 +77,7 @@ export default function MyReservationsPage() {
       setTimeout(() => setSuccessMessage(''), 3000);
       setShowCancelConfirm(null);
     } catch (error: any) {
-      setErrorMessage(error.response?.data?.message || 'Failed to cancel reservation');
+      setErrorMessage(getErrorMessage(error, 'Failed to cancel reservation'));
       setTimeout(() => setErrorMessage(''), 5000);
     } finally {
       setActionLoading(null);

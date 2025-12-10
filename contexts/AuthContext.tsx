@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { authStorage } from '@/lib/auth';
+import { getErrorMessage } from '@/lib/utils/errorHandler';
 import { User, Role, AuthContextType } from '@/types';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -66,10 +67,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(authData.token);
       setUser(userData);
 
-      // Redirect to home page after login
-      router.push('/');
+      // Redirect to appropriate dashboard based on role
+      if (userData.role === 'LIBRARIAN') {
+        router.push('/librarian/dashboard');
+      } else {
+        router.push('/user/dashboard');
+      }
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Login failed');
+      throw new Error(getErrorMessage(error, 'Login failed'));
     }
   };
 
@@ -86,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Just redirect to login page
       router.push('/login');
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Registration failed');
+      throw new Error(getErrorMessage(error, 'Registration failed'));
     }
   };
 

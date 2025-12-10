@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { getBooks, getAllCategories } from '@/lib/api/books';
+import { getErrorMessage } from '@/lib/utils/errorHandler';
 import { Book, Category, BookFilters, PaginatedBooksResponse } from '@/types';
 import BookCard from '@/components/user/BookCard';
 import BookSearch from '@/components/user/BookSearch';
@@ -39,40 +40,38 @@ export default function BooksPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      const loadCategories = async () => {
-        try {
-          const data = await getAllCategories();
-          setCategories(data);
-        } catch (err) {
-          console.error('Failed to load categories:', err);
-        }
-      };
-      loadCategories();
-    }
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const loadBooks = async () => {
+      const loadData = async () => {
         try {
           setLoading(true);
           setError('');
-          const response: PaginatedBooksResponse = await getBooks(filters);
-          setBooks(response.content || []);
+          
+          // Load categories and books in parallel for better performance
+          const [categoriesData, booksResponse] = await Promise.all([
+            getAllCategories().catch((err) => {
+              // Categories are not critical, log error but continue
+              console.error('Failed to load categories:', err);
+              return [];
+            }),
+            getBooks(filters)
+          ]);
+          
+          setCategories(categoriesData);
+          setBooks(booksResponse.content || []);
           setPagination({
-            totalPages: response.totalPages || 0,
-            totalElements: response.totalElements || 0,
-            currentPage: response.number || 0,
-            pageSize: response.size || 12,
+            totalPages: booksResponse.totalPages || 0,
+            totalElements: booksResponse.totalElements || 0,
+            currentPage: booksResponse.number || 0,
+            pageSize: booksResponse.size || 12,
           });
         } catch (err: any) {
-          setError(err.response?.data?.message || 'Failed to load books');
+          setError(getErrorMessage(err, 'Failed to load books'));
           setBooks([]);
         } finally {
           setLoading(false);
         }
       };
-      loadBooks();
+      
+      loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, filters.page, filters.size, filters.categoryId, filters.author, filters.genre, filters.language, filters.title]);

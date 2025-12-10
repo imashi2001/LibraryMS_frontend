@@ -1,7 +1,12 @@
 import api from '../api';
 import { Book, Category, PaginatedBooksResponse, BookFilters } from '@/types';
 
-// Get books with filters and pagination
+/**
+ * Fetches a paginated list of books with optional filters
+ * @param filters - Filter criteria including category, author, genre, language, title, and pagination options
+ * @returns Promise resolving to paginated books response with content array and pagination metadata
+ * @throws Error if API request fails
+ */
 export const getBooks = async (filters: BookFilters = {}): Promise<PaginatedBooksResponse> => {
   const params = new URLSearchParams();
   
@@ -19,13 +24,23 @@ export const getBooks = async (filters: BookFilters = {}): Promise<PaginatedBook
   return response.data.data;
 };
 
-// Get single book by ID
+/**
+ * Fetches a single book by its ID
+ * @param bookId - The unique identifier of the book
+ * @returns Promise resolving to the book object
+ * @throws Error if book is not found or API request fails
+ */
 export const getBookById = async (bookId: number): Promise<Book> => {
   const response = await api.get<{ status: string; message: string; data: Book }>(`/books/${bookId}`);
   return response.data.data;
 };
 
-// Get all categories (for filter dropdown)
+/**
+ * Fetches all available book categories
+ * Used primarily for populating filter dropdowns
+ * @returns Promise resolving to an array of category objects
+ * @throws Error if API request fails
+ */
 export const getAllCategories = async (): Promise<Category[]> => {
   const response = await api.get<{ status: string; message: string; data: Category[] }>('/categories');
   return response.data.data;

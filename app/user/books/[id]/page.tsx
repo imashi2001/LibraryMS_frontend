@@ -5,8 +5,10 @@ import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getBookById } from '@/lib/api/books';
 import { getImageUrl } from '@/lib/api';
+import { getErrorMessage } from '@/lib/utils/errorHandler';
 import { Book } from '@/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import ReserveBookButton from '@/components/user/ReserveBookButton';
 
 export default function BookDetailsPage() {
@@ -39,7 +41,7 @@ export default function BookDetailsPage() {
       const data = await getBookById(bookId);
       setBook(data);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to load book details');
+      setError(getErrorMessage(err, 'Failed to load book details'));
     } finally {
       setLoading(false);
     }
@@ -115,14 +117,17 @@ export default function BookDetailsPage() {
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
             {/* Book Image */}
-            <div>
+            <div className="relative w-full aspect-[2/3]">
               {book.imageUrl ? (
-                <img
+                <Image
                   src={getImageUrl(book.imageUrl) || ''}
                   alt={book.title}
-                  className="w-full h-auto rounded-lg shadow-md"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover rounded-lg shadow-md"
                   onError={(e) => {
-                    e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="600"%3E%3Crect fill="%23e5e7eb" width="400" height="600"/%3E%3Ctext fill="%239ca3af" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+                    // Fallback handled by Next.js Image component
+                    e.currentTarget.style.display = 'none';
                   }}
                 />
               ) : (

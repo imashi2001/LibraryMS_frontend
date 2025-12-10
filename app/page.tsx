@@ -11,8 +11,19 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated, user, isLoading: authLoading } = useAuth();
   const router = useRouter();
+
+  // Redirect authenticated users to their dashboard
+  useEffect(() => {
+    if (!authLoading && isAuthenticated && user) {
+      if (user.role === 'LIBRARIAN') {
+        router.push('/librarian/dashboard');
+      } else {
+        router.push('/user/dashboard');
+      }
+    }
+  }, [isAuthenticated, user, authLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

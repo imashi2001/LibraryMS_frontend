@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { User } from '@/types';
+import { COOKIE_EXPIRY_DAYS } from './constants';
 
 const TOKEN_KEY = 'token';
 const USER_KEY = 'user';
@@ -11,7 +12,7 @@ export const authStorage = {
   },
 
   setToken: (token: string): void => {
-    Cookies.set(TOKEN_KEY, token, { expires: 7 }); // 7 days
+    Cookies.set(TOKEN_KEY, token, { expires: COOKIE_EXPIRY_DAYS });
   },
 
   removeToken: (): void => {
@@ -30,7 +31,7 @@ export const authStorage = {
   },
 
   setUser: (user: User): void => {
-    Cookies.set(USER_KEY, JSON.stringify(user), { expires: 7 });
+    Cookies.set(USER_KEY, JSON.stringify(user), { expires: COOKIE_EXPIRY_DAYS });
   },
 
   removeUser: (): void => {

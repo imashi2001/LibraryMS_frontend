@@ -11,6 +11,7 @@ import EditBookForm from '@/components/librarian/EditBookForm';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import api, { getImageUrl } from '@/lib/api';
 import { deleteBook } from '@/lib/api/librarian';
+import { getErrorMessage } from '@/lib/utils/errorHandler';
 import { Book } from '@/types';
 
 export default function BooksPage() {
@@ -44,7 +45,7 @@ export default function BooksPage() {
       // Backend returns paginated response with content array
       setBooks(response.data.data.content || []);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to load books');
+      setError(getErrorMessage(err, 'Failed to load books'));
     } finally {
       setLoading(false);
     }
@@ -69,7 +70,7 @@ export default function BooksPage() {
       setDeletingBookId(null);
       loadBooks();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to delete book');
+      setError(getErrorMessage(err, 'Failed to delete book'));
       setDeletingBookId(null);
     }
   };
